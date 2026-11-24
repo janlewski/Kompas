@@ -8,6 +8,7 @@ import app.feelings.tracker.App
 import app.feelings.tracker.domain.checkin.CheckInDraft
 import app.feelings.tracker.domain.model.AlarmItem
 import app.feelings.tracker.domain.model.AlarmKind
+import app.feelings.tracker.domain.model.AlarmMode
 import app.feelings.tracker.domain.model.AlarmRegistration
 import app.feelings.tracker.domain.model.AlarmState
 import app.feelings.tracker.domain.model.CheckInSource
@@ -63,7 +64,7 @@ class ActionReceiver : BroadcastReceiver() {
                                 id = actionId,
                                 triggerAtUtc = until,
                                 requestCode = container.alarms.nextRequestCode(),
-                                mode = app.feelings.tracker.domain.model.AlarmMode.APPROXIMATE_WINDOW,
+                                mode = AlarmMode.APPROXIMATE_WINDOW,
                                 items = listOf(AlarmItem(AlarmKind.SNOOZE, ref, silent = false)),
                                 generation = container.settings.get().scheduleGeneration,
                                 state = AlarmState.REGISTERED,

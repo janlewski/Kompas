@@ -20,17 +20,17 @@ class SodiumExportCipher(
         memlimitBytes: Long,
     ): ByteArray {
         val output = ByteArray(SecretStream.KEYBYTES)
-        val ok = sodium.cryptoPwHash(
+        val ok = sodium.crypto_pwhash(
             output,
-            output.size,
+            output.size.toLong(),
             passphrase,
-            passphrase.size,
+            passphrase.size.toLong(),
             salt,
             opslimit.toLong(),
             NativeLong(memlimitBytes),
-            PwHash.Alg.PWHASH_ALG_ARGON2ID13,
+            PwHash.Alg.PWHASH_ALG_ARGON2ID13.value,
         )
-        if (!ok) {
+        if (ok != 0) {
             output.fill(0)
             error("kdf")
         }
@@ -44,7 +44,7 @@ class SodiumExportCipher(
     ): EncryptedPayload {
         val state = SecretStream.State()
         val streamHeader = ByteArray(SecretStream.HEADERBYTES)
-        check(sodium.cryptoSecretStreamInitPush(state, streamHeader, key))
+        check(sodium.crypto_secretstream_xchacha20poly1305_init_push(state, streamHeader, key) == 0)
         val additional = additionalDataFor(streamHeader)
         val encrypted = chunks.mapIndexed { index, plain ->
             val tag = if (index == chunks.lastIndex) SecretStream.TAG_FINAL else SecretStream.TAG_MESSAGE
@@ -57,7 +57,9 @@ class SodiumExportCipher(
 
     override fun decrypt(key: ByteArray, payload: EncryptedPayload, additionalData: ByteArray): DecryptOutcome {
         val state = SecretStream.State()
-        if (!sodium.cryptoSecretStreamInitPull(state, payload.streamHeader, key)) return DecryptOutcome.AuthFailed
+        if (sodium.crypto_secretstream_xchacha20poly1305_init_pull(state, payload.streamHeader, key) != 0) {
+            return DecryptOutcome.AuthFailed
+        }
         val plain = java.io.ByteArrayOutputStream()
         var sawFinal = false
         payload.chunks.forEachIndexed { index, chunk ->
@@ -73,7 +75,7 @@ class SodiumExportCipher(
     private fun push(state: SecretStream.State, message: ByteArray, ad: ByteArray?, tag: Byte): ByteArray {
         val cipher = ByteArray(message.size + SecretStream.ABYTES)
         val written = LongArray(1)
-        val ok = sodium.cryptoSecretStreamPush(
+        val ok = sodium.crypto_secretstream_xchacha20poly1305_push(
             state,
             cipher,
             written,
@@ -83,7 +85,7 @@ class SodiumExportCipher(
             (ad?.size ?: 0).toLong(),
             tag,
         )
-        check(ok)
+        check(ok == 0)
         val length = written[0].toInt().takeIf { it in 1..cipher.size } ?: cipher.size
         return cipher.copyOf(length)
     }
@@ -92,7 +94,7 @@ class SodiumExportCipher(
         val message = ByteArray((cipher.size - SecretStream.ABYTES).coerceAtLeast(0))
         val written = LongArray(1)
         val tag = ByteArray(1)
-        val ok = sodium.cryptoSecretStreamPull(
+        val ok = sodium.crypto_secretstream_xchacha20poly1305_pull(
             state,
             message,
             written,
@@ -102,7 +104,7 @@ class SodiumExportCipher(
             ad,
             (ad?.size ?: 0).toLong(),
         )
-        if (!ok) return null
+        if (ok != 0) return null
         val length = written[0].toInt().coerceIn(0, message.size)
         return Pulled(message.copyOf(length), tag[0] == SecretStream.TAG_FINAL)
     }

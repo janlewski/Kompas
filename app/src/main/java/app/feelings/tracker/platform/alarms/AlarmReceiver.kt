@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import app.feelings.tracker.App
+import app.feelings.tracker.R
 import kotlinx.coroutines.launch
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -32,7 +33,7 @@ class RescheduleReceiver : BroadcastReceiver() {
                     android.os.Build.VERSION.SDK_INT >= 31 &&
                     !context.getSystemService(android.app.AlarmManager::class.java).canScheduleExactAlarms()
                 ) {
-                    app.container.notifications.postStatus(app.feelings.tracker.R.string.notif_exact_revoked)
+                    app.container.notifications.postStatus(R.string.notif_exact_revoked)
                 }
             } finally {
                 pending.finish()

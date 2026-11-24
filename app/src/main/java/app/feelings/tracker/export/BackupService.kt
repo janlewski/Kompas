@@ -200,7 +200,10 @@ class BackupService(
             exportedAtUtc = (manifest["exportedAtUtc"] as Number).toLong(),
             appVersion = manifest["appVersion"] as String,
             appLanguage = manifest["appLanguage"] as? String ?: "system",
-            counts = counts.mapValues { (it.value as Number).toInt() },
+            counts =
+                counts.entries.associate { (key, value) ->
+                    key as String to (value as Number).toInt()
+                },
             tags = tags,
             checkIns = checkIns,
             links = links,
