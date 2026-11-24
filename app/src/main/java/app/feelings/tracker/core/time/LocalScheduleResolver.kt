@@ -29,8 +29,9 @@ object LocalScheduleResolver {
             offsets.size > 1 -> DstResolution.OVERLAP_FIRST
             else -> DstResolution.NORMAL
         }
-        val preferred: ZoneOffset? = offsets.minByOrNull { it.totalSeconds }
-        val zoned = ZonedDateTime.ofLocal(local, zone, preferred)
+        // getValidOffsets puts the earlier offset at index 0 during an overlap.
+        val earlier = offsets.firstOrNull()
+        val zoned = ZonedDateTime.ofLocal(local, zone, earlier)
         return ResolvedLocalTime(zoned.toInstant(), resolution, zone)
     }
 }
