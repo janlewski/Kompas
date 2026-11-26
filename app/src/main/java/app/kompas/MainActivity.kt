@@ -9,8 +9,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import app.kompas.domain.model.AppLanguage
-import app.kompas.ui.FeelingsApp
-import app.kompas.ui.theme.FeelingsTheme
+import app.kompas.ui.KompasApp
+import app.kompas.ui.theme.KompasTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,8 +32,8 @@ class MainActivity : ComponentActivity() {
                     AppCompatDelegate.setApplicationLocales(locales)
                 }
             }
-            FeelingsTheme(theme = theme) {
-                FeelingsApp(container)
+            KompasTheme(theme = theme) {
+                KompasApp(container)
             }
         }
     }

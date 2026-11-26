@@ -127,7 +127,7 @@ private object Routes {
 }
 
 @Composable
-fun FeelingsApp(container: AppContainer) {
+fun KompasApp(container: AppContainer) {
     val db by container.dbState.collectAsStateWithLifecycle()
     val onboarded by container.prefs.onboardingCompleted.collectAsStateWithLifecycle(initialValue = false)
     when (val state = db) {

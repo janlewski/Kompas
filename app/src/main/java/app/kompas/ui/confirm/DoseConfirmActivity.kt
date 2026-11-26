@@ -19,7 +19,7 @@ import app.kompas.R
 import app.kompas.domain.model.DoseSource
 import app.kompas.domain.model.DoseStatus
 import app.kompas.platform.notify.NotificationFactory
-import app.kompas.ui.theme.FeelingsTheme
+import app.kompas.ui.theme.KompasTheme
 import kotlinx.coroutines.launch
 
 class DoseConfirmActivity : ComponentActivity() {
@@ -32,7 +32,7 @@ class DoseConfirmActivity : ComponentActivity() {
         val medicationId = intent.getStringExtra(NotificationFactory.EXTRA_MEDICATION_ID).orEmpty()
         val occurrenceId = intent.getStringExtra(NotificationFactory.EXTRA_OCCURRENCE_ID)
         setContent {
-            FeelingsTheme(theme = app.kompas.domain.model.ThemePref.SYSTEM) {
+            KompasTheme(theme = app.kompas.domain.model.ThemePref.SYSTEM) {
                 val scope = rememberCoroutineScope()
                 Column(
                     Modifier.fillMaxSize().padding(24.dp),

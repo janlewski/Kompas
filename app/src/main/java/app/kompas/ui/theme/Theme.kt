@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalContext
 import app.kompas.domain.model.ThemePref
 
 @Composable
-fun FeelingsTheme(theme: ThemePref, content: @Composable () -> Unit) {
+fun KompasTheme(theme: ThemePref, content: @Composable () -> Unit) {
     val dark = when (theme) {
         ThemePref.DARK -> true
         ThemePref.LIGHT -> false
