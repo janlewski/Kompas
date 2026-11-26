@@ -47,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -450,7 +451,7 @@ private fun problemText(problem: CheckInProblem, empty: String, range: String, n
 
 @Composable
 private fun HistoryScreen(container: AppContainer) {
-    val context = LocalContext.current
+    val resources = LocalResources.current
     var lines by remember { mutableStateOf(listOf<String>()) }
     val empty = stringResource(R.string.history_empty)
     val sleepLabel = stringResource(R.string.tile_sleep)
@@ -461,8 +462,8 @@ private fun HistoryScreen(container: AppContainer) {
         val today = container.clock.instant().atZone(zone).toLocalDate()
         val checkIns = container.checkIns.between(today.minusDays(30), today)
         val sleep = container.sleep.between(today.minusDays(30), today)
-        lines = sleep.map { context.getString(R.string.history_sleep_line, sleepLabel, it.wakeDate.toString(), it.durationMinutes) } +
-            checkIns.map { context.getString(R.string.history_checkin_line, checkLabel, it.localDate.toString(), it.stress?.toString() ?: none) }
+        lines = sleep.map { resources.getString(R.string.history_sleep_line, sleepLabel, it.wakeDate.toString(), it.durationMinutes) } +
+            checkIns.map { resources.getString(R.string.history_checkin_line, checkLabel, it.localDate.toString(), it.stress?.toString() ?: none) }
     }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp)) {
         if (lines.isEmpty()) Text(empty) else lines.forEach { Text(it, modifier = Modifier.padding(vertical = 8.dp)) }
@@ -471,7 +472,7 @@ private fun HistoryScreen(container: AppContainer) {
 
 @Composable
 private fun TrendsScreen(container: AppContainer) {
-    val context = LocalContext.current
+    val resources = LocalResources.current
     var body by remember { mutableStateOf(listOf<String>()) }
     var points by remember { mutableStateOf(listOf<Float>()) }
     val off = stringResource(R.string.trends_off)
@@ -500,11 +501,11 @@ private fun TrendsScreen(container: AppContainer) {
         val values = series.mapNotNull { it.value }
         val usual = Baseline.usualRange(values)
         val observed = series.count { it.value != null }
-        val lines = mutableListOf(context.getString(R.string.coverage, observed, series.size))
+        val lines = mutableListOf(resources.getString(R.string.coverage, observed, series.size))
         lines += if (usual.median == null) {
-            context.getString(R.string.usual_range_need, usual.observed)
+            resources.getString(R.string.usual_range_need, usual.observed)
         } else {
-            context.getString(R.string.usual_range_span, usual.low, usual.high)
+            resources.getString(R.string.usual_range_span, usual.low, usual.high)
         }
         val week = WeekFields.ISO
         val thisWeek = series.filter { it.date.get(week.weekOfWeekBasedYear()) == today.get(week.weekOfWeekBasedYear()) }.mapNotNull { it.value }
