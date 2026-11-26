@@ -1,0 +1,9 @@
+# Release APK permissions. WAKE_LOCK is merged by WorkManager for the daily
+# integrity check. FOREGROUND_SERVICE is removed in the manifest because the
+# worker never runs in the foreground. INTERNET and ACCESS_NETWORK_STATE are
+# removed even if a library merges them.
+android.permission.POST_NOTIFICATIONS
+android.permission.RECEIVE_BOOT_COMPLETED
+android.permission.SCHEDULE_EXACT_ALARM
+android.permission.WAKE_LOCK
+app.kompas.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION

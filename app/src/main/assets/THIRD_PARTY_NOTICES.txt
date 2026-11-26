@@ -1,0 +1,14 @@
+Kompas uses these open-source components. Source links are text so they can be read offline.
+
+AndroidX, Kotlin, KotlinX Coroutines — Apache License 2.0
+https://www.apache.org/licenses/LICENSE-2.0
+
+SQLCipher for Android (net.zetetic:sqlcipher-android) — BSD-style license
+https://www.zetetic.net/sqlcipher/license/
+https://github.com/sqlcipher/sqlcipher-android
+
+LazySodium Android — Mozilla Public License 2.0
+https://github.com/terl/lazysodium-android
+
+JNA — Apache License 2.0 or LGPL 2.1
+https://github.com/java-native-access/jna
