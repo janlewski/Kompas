@@ -2,6 +2,7 @@ package app.feelings.tracker.data.db
 
 import android.content.Context
 import androidx.room.Room
+import androidx.sqlite.db.SupportSQLiteOpenHelper
 import app.feelings.tracker.core.crypto.DbKeyManager
 import app.feelings.tracker.core.crypto.SqlCipherKeys
 import app.feelings.tracker.core.result.AppError
@@ -15,6 +16,8 @@ object DatabaseFactory {
         val key = (loaded as AppResult.Ok).value
         val passphrase = SqlCipherKeys.rawKeyPassphrase(key)
         key.fill(0)
+        val factory = RetainedPassphraseFactory(passphrase)
+        passphrase.fill(0)
         System.loadLibrary("sqlcipher")
         return try {
             val database = Room.databaseBuilder(
@@ -22,14 +25,18 @@ object DatabaseFactory {
                 AppDatabase::class.java,
                 DbKeyManager.DATABASE_NAME,
             )
-                .openHelperFactory(SupportOpenHelperFactory(passphrase))
+                .openHelperFactory(factory)
                 .addCallback(SeedCallback())
                 .build()
-            database.openHelper.writableDatabase.query("SELECT count(*) FROM app_settings").close()
-            passphrase.fill(0)
+            try {
+                database.openHelper.writableDatabase.query("SELECT count(*) FROM app_settings").close()
+            } catch (thrown: Exception) {
+                runCatching { database.close() }
+                throw thrown
+            }
             AppResult.Ok(database)
         } catch (_: Exception) {
-            passphrase.fill(0)
+            factory.wipe()
             if (keyManager.hasDatabase()) AppResult.Err(AppError.KeyLost) else AppResult.Err(AppError.DbOpenFailed)
         }
     }
@@ -37,8 +44,36 @@ object DatabaseFactory {
     fun openPassphrase(context: Context, name: String, passphrase: ByteArray, seed: Boolean): AppDatabase {
         System.loadLibrary("sqlcipher")
         val builder = Room.databaseBuilder(context.applicationContext, AppDatabase::class.java, name)
-            .openHelperFactory(SupportOpenHelperFactory(passphrase))
+            .openHelperFactory(RetainedPassphraseFactory(passphrase))
         if (seed) builder.addCallback(SeedCallback())
         return builder.build()
+    }
+}
+
+/**
+ * SQLCipher 4.20 keeps the passphrase array and passes it to sqlite3_key for every pooled
+ * connection. The caller's array can be wiped immediately. The retained copy is wiped on close.
+ */
+private class RetainedPassphraseFactory(
+    passphrase: ByteArray,
+) : SupportSQLiteOpenHelper.Factory {
+    private val retained = passphrase.copyOf()
+    private val delegate = SupportOpenHelperFactory(retained)
+
+    fun wipe() {
+        retained.fill(0)
+    }
+
+    override fun create(configuration: SupportSQLiteOpenHelper.Configuration): SupportSQLiteOpenHelper {
+        val helper = delegate.create(configuration)
+        return object : SupportSQLiteOpenHelper by helper {
+            override fun close() {
+                try {
+                    helper.close()
+                } finally {
+                    wipe()
+                }
+            }
+        }
     }
 }
