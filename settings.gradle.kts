@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "feelings-tracker"
+rootProject.name = "Kompas"
 include(":app")
