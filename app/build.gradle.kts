@@ -92,8 +92,15 @@ dependencies {
     implementation(libs.sqlcipher)
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.work)
-    implementation(libs.lazysodium)
-    implementation(libs.jna)
+    // The JNA JAR does not install libjnidispatch.so. Android then crashes in Native.<clinit>.
+    implementation(libs.lazysodium) {
+        exclude(group = "net.java.dev.jna", module = "jna")
+    }
+    implementation(libs.jna) {
+        artifact {
+            type = "aar"
+        }
+    }
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
