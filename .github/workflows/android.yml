@@ -34,7 +34,7 @@ jobs:
           set +o pipefail
           yes | "$tool" --sdk_root="$sdk" --licenses >/dev/null || true
           set -o pipefail
-          "$tool" --sdk_root="$sdk" "platforms;android-37" "build-tools;36.0.0"
+          "$tool" --sdk_root="$sdk" "platforms;android-37.0" "build-tools;36.0.0"
       - name: Unit tests and lint
         run: |
           chmod +x ./gradlew
@@ -85,7 +85,7 @@ jobs:
           set +o pipefail
           yes | "$tool" --sdk_root="$sdk" --licenses >/dev/null || true
           set -o pipefail
-          "$tool" --sdk_root="$sdk" "platforms;android-37" "build-tools;36.0.0"
+          "$tool" --sdk_root="$sdk" "platforms;android-37.0" "build-tools;36.0.0"
       - name: Check version name
         env:
           VERSION: ${{ inputs.version }}
