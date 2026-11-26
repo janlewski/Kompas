@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Feelings Tracker</string>
+    <string name="app_name">Kompas</string>
     <string name="nav_home">Home</string>
     <string name="nav_history">History</string>
     <string name="nav_trends">Trends</string>
@@ -205,7 +205,7 @@
     <string name="backup_wrong">Can\'t open: wrong passphrase or damaged file</string>
     <string name="backup_truncated">The file is incomplete</string>
     <string name="backup_newer">Update the app to open this backup</string>
-    <string name="backup_not">This is not a Feelings Tracker backup</string>
+    <string name="backup_not">This is not a Kompas backup</string>
     <string name="backup_storage">Not enough storage</string>
     <string name="backup_limit">This backup is outside the supported limits.</string>
     <string name="settings_language">Language</string>

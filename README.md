@@ -1,4 +1,4 @@
-# Feelings Tracker
+# Kompas
 
 A private, on-device Android journal for sleep, stress, physical feeling, mental feeling, notes and medication reminders. The app has no network access, no accounts and no analytics.
 

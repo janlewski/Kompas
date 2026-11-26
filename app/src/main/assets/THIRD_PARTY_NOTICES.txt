@@ -1,4 +1,4 @@
-Feelings Tracker uses these open-source components. Source links are text so they can be read offline.
+Kompas uses these open-source components. Source links are text so they can be read offline.
 
 AndroidX, Kotlin, KotlinX Coroutines — Apache License 2.0
 https://www.apache.org/licenses/LICENSE-2.0

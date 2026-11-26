@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Dziennik samopoczucia</string>
+    <string name="app_name">Kompas</string>
     <string name="nav_home">Start</string>
     <string name="nav_history">Historia</string>
     <string name="nav_trends">Trendy</string>
@@ -205,7 +205,7 @@
     <string name="backup_wrong">Nie da się otworzyć: złe hasło albo uszkodzony plik</string>
     <string name="backup_truncated">Plik jest niekompletny</string>
     <string name="backup_newer">Zaktualizuj aplikację, aby otworzyć tę kopię</string>
-    <string name="backup_not">To nie jest kopia Dziennika samopoczucia</string>
+    <string name="backup_not">To nie jest kopia Kompasu</string>
     <string name="backup_storage">Za mało miejsca</string>
     <string name="backup_limit">Ta kopia jest poza obsługiwanymi limitami.</string>
     <string name="settings_language">Język</string>
