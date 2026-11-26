@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "app.feelings.tracker"
+    namespace = "app.kompas"
     compileSdk = 37
 
     defaultConfig {
