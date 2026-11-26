@@ -11,7 +11,7 @@ android {
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "app.feelings.tracker"
+        applicationId = "app.kompas"
         minSdk = 26
         targetSdk = 36
         versionCode = (findProperty("versionCode") as String?)?.toInt() ?: 1
