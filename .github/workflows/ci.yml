@@ -35,13 +35,11 @@ jobs:
         run: |
           chmod +x ./gradlew
           ./gradlew testDebugUnitTest lint checkBannedDependencies --stacktrace
-      - name: Release APK for the permission check
-        timeout-minutes: 15
-        run: ./gradlew assembleRelease --stacktrace
       - name: Permission allow-list
-        timeout-minutes: 5
+        timeout-minutes: 10
         run: |
-          chmod +x scripts/check-permissions.sh
-          apk="$(find app/build/outputs/apk/release -name '*.apk' -print -quit)"
-          test -n "$apk"
-          ./scripts/check-permissions.sh "$apk"
+          chmod +x ./gradlew scripts/check-permissions.sh
+          ./gradlew :app:processReleaseMainManifest --stacktrace
+          manifest="$(find app/build/intermediates/merged_manifest/release -name AndroidManifest.xml -print -quit)"
+          test -n "$manifest"
+          ./scripts/check-permissions.sh "$manifest"
